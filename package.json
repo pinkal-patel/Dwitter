@@ -1,0 +1,34 @@
+{
+    "name": "dwitter",
+    "version": "12.18.1",
+    "description": "Dwitter application",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo test",
+        "start": "node server.js"
+    },
+    "author": "Pinkal",
+    "license": "ISC",
+    "dependencies": {
+        "bcrypt": "^5.0.1",
+        "body-parser": "^1.18.3",
+        "compression": "^1.7.2",
+        "convict": "^5.2.0",
+        "cookie-parser": "^1.4.3",
+        "elasticsearch": "^16.7.1",
+        "express": "^4.16.3",
+        "helmet": "^3.22.0",
+        "jsonschema": "^1.2.4",
+        "jsonwebtoken": "^8.5.1",
+        "lodash": "^4.17.15",
+        "moment": "^2.29.1",
+        "moment-timezone": "^0.5.21",
+        "morgan": "^1.6.1",
+        "node-uuid": "^1.4.8",
+        "nodemailer": "^6.6.3",
+        "nodemailer-smtp-transport": "^2.7.4",
+        "q": "^1.5.1",
+        "restler": "^3.4.0",
+        "winston": "^2.4.4"
+    }
+}

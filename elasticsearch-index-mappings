@@ -1,0 +1,316 @@
+=======================================(1)-dweets =============================================
+
+PUT dweets
+{
+  "settings": {
+    "index": {
+      "max_ngram_diff": "30",
+      "refresh_interval": "1s",
+      "number_of_shards": "3",
+      "max_result_window": "2000000",
+      "analysis": {
+        "filter": {
+          "ngram_filter": {
+            "type": "ngram",
+            "min_gram": "2",
+            "max_gram": "30"
+          }
+        },
+        "analyzer": {
+          "case_insensitive_sort": {
+            "filter": [
+              "lowercase"
+            ],
+            "tokenizer": "keyword"
+          },
+          "ngram_analyzer": {
+            "filter": [
+              "lowercase",
+              "ngram_filter"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          }
+        }
+      },
+      "number_of_replicas": "1"
+    }
+  },
+  "mappings": {
+    "dynamic":"false",
+    "properties": {
+      "id":{
+        "type":"keyword"
+      },
+        "createdAt":{
+        "type":"date"
+      },
+        "createdBy":{
+        "type":"keyword"
+      },
+        "updatedBy":{
+        "type":"keyword"
+      },
+        "updatedAt":{
+        "type":"keyword"
+      },
+      "isDeleted":{
+        "type":"boolean"
+      },
+      "normalizedMsg": {
+        "type": "keyword"
+      },
+      "message": {
+        "type": "text",
+        "fields": {
+          "lower_case_sort": {
+            "type": "text",
+            "analyzer": "case_insensitive_sort",
+            "fielddata": true
+          }
+        },
+        "analyzer": "ngram_analyzer",
+        "search_analyzer": "standard",
+        "fielddata": true
+      }
+    }
+  }
+}
+
+=======================================(2)-users==================================================================
+
+PUT users
+{
+  "settings": {
+    "index": {
+      "max_ngram_diff": "30",
+      "refresh_interval": "1s",
+      "number_of_shards": "5",
+      "analysis": {
+        "filter": {
+          "ngram_filter": {
+            "type": "ngram",
+            "min_gram": "1",
+            "max_gram": "30"
+          },
+          "myLowerCaseFilter": {
+            "type": "lowercase"
+          }
+        },
+        "analyzer": {
+          "urls-links-emails": {
+            "filter": [
+              "myLowerCaseFilter"
+            ],
+            "type": "custom",
+            "tokenizer": "uax_url_email"
+          },
+          "case_insensitive_sort": {
+            "filter": [
+              "lowercase"
+            ],
+            "tokenizer": "keyword"
+          },
+          "ngram_analyzer": {
+            "filter": [
+              "lowercase",
+              "ngram_filter"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          }
+        }
+      },
+      "number_of_replicas": "1"
+    }
+  },
+  "mappings": {
+    "dynamic": "false",
+    "properties": {
+      "email": {
+        "type": "text",
+        "fields": {
+          "lower_case_sort": {
+            "type": "text",
+            "analyzer": "case_insensitive_sort"
+          }
+        },
+        "analyzer": "urls-links-emails"
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "userName": {
+        "type": "text",
+        "fields": {
+          "lower_case_sort": {
+            "type": "text",
+            "analyzer": "case_insensitive_sort"
+          },
+       
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          
+        },
+        "analyzer": "ngram_analyzer",
+        "search_analyzer": "standard"
+      },
+      "name": {
+        "type": "text",
+        "fields": {
+          "lower_case_sort": {
+            "type": "text",
+            "analyzer": "case_insensitive_sort"
+          }
+        },
+        "analyzer": "ngram_analyzer",
+        "search_analyzer": "standard"
+      },
+      "birthDate": {
+        "type": "date"
+      },
+      "createdAt": {
+        "type": "date"
+      },
+      "updatedAt": {
+        "type": "date"
+      },
+      "createdBy": {
+        "type": "keyword"
+      },
+      "updatedBy": {
+        "type": "keyword"
+      },
+      "isDeleted": {
+        "type": "boolean"
+      },
+       "iseVerified": {
+        "type": "boolean"
+      },
+      "followingDweeterIds": {
+        "type": "keyword"
+      },
+      "password": {
+        "type": "keyword"
+      },
+      "salt": {
+        "type": "keyword"
+      },
+      "phone": {
+        "type": "text",
+        "fielddata": true
+      }
+    }
+  }
+}
+
+=========================================(3)-likes=================================================
+
+PUT likes
+{
+  "settings": {
+    "index": {
+      "refresh_interval": "1s",
+      "number_of_shards": "5",
+      "number_of_replicas": "1"
+    }
+  },
+  "mappings": {
+    "dynamic":false,
+    "properties": {
+      "id":{
+        "type": "keyword"
+      },
+      "autherId":{
+        "type": "keyword"
+      },
+      "likedBy":{
+        "type": "keyword"
+      },
+      "dweetId":{
+        "type": "keyword"
+      },
+      "datetime":{
+        "type": "date"
+      }
+    }
+  }
+}
+
+============================================(4)-comments===============================================
+
+PUT comments
+{
+  "settings": {
+    "index": {
+      "max_ngram_diff": "30",
+      "refresh_interval": "1s",
+      "number_of_shards": "5",
+      "number_of_replicas": "1",
+      "analysis": {
+        "filter": {
+          "ngram_filter": {
+            "type": "ngram",
+            "min_gram": "2",
+            "max_gram": "30"
+          },
+          "myLowerCaseFilter": {
+            "type": "lowercase"
+          }
+        },
+        "analyzer": {
+          "case_insensitive_sort": {
+            "filter": [
+              "lowercase"
+            ],
+            "tokenizer": "keyword"
+          },
+          "ngram_analyzer": {
+            "filter": [
+              "lowercase",
+              "ngram_filter"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          }
+        }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "autherId": {
+        "type": "keyword"
+      },
+      "commentedBy": {
+        "type": "keyword"
+      },
+      "dweetId": {
+        "type": "keyword"
+      },
+      "datetime": {
+        "type": "date"
+      },
+      "comment": {
+        "type": "text",
+        "fields": {
+          "lower_case_sort": {
+            "type": "text",
+            "analyzer": "case_insensitive_sort",
+            "fielddata": true
+          }
+        },
+        "analyzer": "ngram_analyzer",
+        "search_analyzer": "standard",
+        "fielddata": true
+      }
+    }
+  }
+}
+
